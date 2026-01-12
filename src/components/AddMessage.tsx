@@ -3,19 +3,21 @@ import { useAuth } from "../context/AuthContext";
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "../../supabase-client";
 
+// The shape of the message input 
 interface MessageInput {
   content: string;
   user_name: string;
   user_id: string;
 }
 
-// To add the message to supabase
+// Function to add a message to Supabase
 const addMessage = async (message: MessageInput) => {
   const { data, error } = await supabase
-    .from("messages") 
-    .insert([message])
-    .select();
+    .from("messages") // In messages table
+    .insert([message]) // Insert the new message
+    .select(); // Return the inserted message
 
+  // If there's an error, throw it
   if (error) {
     throw error;
   }
@@ -24,30 +26,32 @@ const addMessage = async (message: MessageInput) => {
 };
 
 export const AddMessage = () => {
-  const [content, setContent] = useState<string>("");
-  const { user } = useAuth();
+  const [content, setContent] = useState<string>(""); // State to hold message content
+  const { user } = useAuth(); // Get current user from auth context
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (data: MessageInput) => {
-      return addMessage(data);
+      return addMessage(data); // Call addMessage function
     },
     onSuccess: () => {
-      setContent("");
+      setContent(""); // Clear the content field
       console.log("Message added successfully!");
     },
     onError: (error) => {
-      console.error("Error adding message:", error);
+      console.error("Error adding message:", error); // Log any errors
     },
   });
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent default form submission behavior
 
+    // If no user is logged in, alert and return
     if (!user) {
       alert("You must be logged in to post a message");
       return;
     }
 
+    // Call mutate to add the message
     mutate({
       content,
       user_name: user.user_metadata?.user_name || user.email || "Anonymous",
@@ -64,7 +68,7 @@ export const AddMessage = () => {
         <textarea
           id="content"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => setContent(e.target.value)} // Update content state on change
           className="w-full border border-black/10 bg-transparent p-2 rounded text-black"
           rows={5}
           required
@@ -72,7 +76,7 @@ export const AddMessage = () => {
       </div>
       <button
         type="submit"
-        disabled={isPending || !user}
+        disabled={isPending || !user} // Disable button if pending or no user
         className="bg-blue-700 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-500 disabled:bg-gray-500 disabled:cursor-not-allowed transition-colors"
       >
         {isPending ? "Creating..." : "Create Message"}

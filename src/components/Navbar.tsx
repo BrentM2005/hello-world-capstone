@@ -3,10 +3,10 @@ import { Link } from "react-router";
 import { useAuth } from "../context/AuthContext";
 
 export const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const { signInWithGitHub, signOut, user } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false); // State to track if mobile menu is open
+  const { signInWithGitHub, signOut, user } = useAuth(); // Get auth functions and user from context
 
-  const displayName = user?.user_metadata.user_name || user?.email;
+  const displayName = user?.user_metadata.user_name || user?.email; // Displays username or email
   return (
     <nav className="fixed top-0 w-full z-40 bg-blue-700/80 backdrop-blur-lg border-b border-white/10 shadow-lg">
       <div className="max-w-5xl mx-auto px-4">
@@ -28,6 +28,18 @@ export const Navbar = () => {
               className="text-white hover:text-white transition-colors"
             >
               Add Message
+            </Link>
+            <Link
+              to="/update-message"
+              className="text-white hover:text-white transition-colors"
+            >
+              Update Message
+            </Link>
+            <Link
+              to="/users"
+              className="text-white hover:text-white transition-colors"
+            >
+              Users
             </Link>
           </div>
 
@@ -101,15 +113,27 @@ export const Navbar = () => {
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
               to="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-white hover:bg-white"
+              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-white hover:bg-blue-500"
             >
               Home
             </Link>
             <Link
               to="/add-message"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-white hover:bg-white"
+              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-white hover:bg-blue-500"
             >
               Add Message
+            </Link>
+            <Link
+              to="/update-message"
+              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-white hover:bg-blue-500"
+            >
+              Update Message
+            </Link>
+            <Link
+              to="/users"
+              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-white hover:bg-blue-500"
+            >
+              Users
             </Link>
           </div>
         </div>
